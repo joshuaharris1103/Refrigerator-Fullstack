@@ -1,0 +1,13 @@
+{% layout 'layout.liquid'%}
+{% block content %}
+{% if item.length > 0 %}
+<h2>My Fridge</h2>
+    <ul>
+        {% for item in fridge %}
+            <li>{{ item.name }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h2>Your fridge is empty... Go get some groceries!</h2>
+{% endif %}
+{% endblock %}

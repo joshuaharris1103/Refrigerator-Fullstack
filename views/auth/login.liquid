@@ -1,0 +1,20 @@
+{% layout 'layout.liquid' %}
+{% block content %}
+
+<div class="container-sm">
+    <form action="/auth/login" method="POST">
+        <fieldset>
+            <legend>Enter FridgeID credentials to access your logs</legend>
+            <label class="form-label">Username: </label>
+            <input type="text" name="username" placeholder="Username" class="mb-3 form-control" required>
+            <label class="form-label">Password</label>
+            <input type="password" name="password" placeholder="Enter Password" class="mb-3 form-control" required>
+        </fieldset>
+        <input type="submit" value="Log In" class="mb-3 btn btn-success">
+    </form>
+    <a href="/auth/signup" class="mb-3">Create Account</a>
+    <br>
+    <a href="/auth/forgot" class="mb-3">Forgot FridgeID/Password </a>
+</div>
+
+{% endblock %}
