@@ -21,7 +21,7 @@ const router = express.Router()
 
 // Routes
 
-// index ALL
+// Home Screen
 router.get('/', (req, res) => {
 	Fridge.find({})
 		.then(fridge => {
@@ -35,9 +35,8 @@ router.get('/', (req, res) => {
 		})
 })
 
-// index that shows only the user's examples
+//(edit page???)
 router.get('/', (req, res) => {
-    // destructure user info from req.session
     const { username, userId, loggedIn } = req.session
 	Fridge.find({ owner: userId })
 		.then(fridge => {
@@ -48,7 +47,7 @@ router.get('/', (req, res) => {
 		})
 })
 
-// new route -> GET route that renders our page with the form
+// GET route that renders our page with the form for new items
 router.get('/new', (req, res) => {
 	const { username, userId, loggedIn } = req.session
 	res.render('fridge/new', { username, loggedIn })
@@ -68,47 +67,16 @@ router.post('/', async (req, res) => {
 			res.redirect(`/error?error=${error}`)
 		})
 })
-// router.get('/mine', (req, res) => {
-//     // find fruits by ownership, using the req.session info
-//     Fridge.find({ owner: req.session.userId })
-//         .populate('owner', 'username')
-//         .then(fridge => {
-//             res.render('fruits/index', { fruits, ...req.session })
-//         })
-//         .catch(err => {
-//             // otherwise throw an error
-//             console.log(err)
-//             // res.status(400).json(err)
-//             res.redirect(`/error?error=${err}`)
-//         })
-// })
-
-// router.get('/json', (req, res) => {
-//     // find fruits by ownership, using the req.session info
-//     Fruit.find({ owner: req.session.userId })
-//         .populate('owner', 'username')
-//         .then(fridge => {
-//             // if found, display the fruits
-//             res.status(200).json({ fridge: fridge })
-//         })
-//         .catch(err => {
-//             // otherwise throw an error
-//             console.log(err)
-//             res.status(400).json(err)
-//         })
-// })
 
 // edit route -> GET that takes us to the edit form view
-router.get('/edit/:id', (req, res) => {
+router.get('/:id/edit', (req, res) => {
 	// we need to get the id
-	const fridgeId = req.params.id
+	const fridgeId = req.body.id
 	Fridge.findById(fridgeId)
 		.then(fridge => {
-			console.log('server is recieving get request')
-			res.render('fridge/edit', { fridge, ...req.session })
+			res.render('/edit', { fridge, ...req.session })
 		})
 		.catch((error) => {
-			console.log('server is not recieving get request')
 			res.redirect(`/error?error=${error}`)
 		})
 })
@@ -126,15 +94,14 @@ router.put('/:id', (req, res) => {
 			}
 		})
 		then(()=>{
-			res.redirect(`/fridge/${id}`)
+			res.redirect(`/fridge/${Fridge}`)
 		})
 		.catch((error) => {
-			console.log('server is not recieving get request')
 			res.redirect(`/error?error=${error}`)
 		})
 })
 
-// show route
+// show route (fridge/edit)
 router.get('/:id', (req, res) => {
 	const id = req.body.id
 	Fridge.findById(id)
@@ -148,7 +115,7 @@ router.get('/:id', (req, res) => {
 })
 
 // delete route
-router.delete('fridge/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
 	const fridgeId = req.params.id
 	Fridge.findByIdAndRemove(fridgeId)
 		.then(fridge => {
@@ -159,11 +126,10 @@ router.delete('fridge/:id', (req, res) => {
 				res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20delete%20this%20item`)
 			}
 		})
-		.then(id => {
+		.then(() => {
 			res.redirect('/fridge')
 		})
 		.catch(error => {
-
 			res.redirect(`/error?error=${error}`)
 		})
 })
