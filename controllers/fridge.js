@@ -62,36 +62,53 @@ router.post('/', async (req, res) => {
 	console.log('this is req.body aka newItem, after owner\n', newItem)
 	Fridge.create(newItem)
 		.then(fridge => {
-			res.redirect(`/fridge/${newItem.id}`)
+			res.redirect(`fridge/`)
 		})
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)
 		})
 })
-router.get('/mine', (req, res) => {
-    // find fruits by ownership, using the req.session info
-    Fridge.find({ owner: req.session.userId })
-        .populate('owner', 'username')
-        .then(fridge => {
-            res.render('fruits/index', { fruits, ...req.session })
-        })
-        .catch(err => {
-            // otherwise throw an error
-            console.log(err)
-            // res.status(400).json(err)
-            res.redirect(`/error?error=${err}`)
-        })
-})
+// router.get('/mine', (req, res) => {
+//     // find fruits by ownership, using the req.session info
+//     Fridge.find({ owner: req.session.userId })
+//         .populate('owner', 'username')
+//         .then(fridge => {
+//             res.render('fruits/index', { fruits, ...req.session })
+//         })
+//         .catch(err => {
+//             // otherwise throw an error
+//             console.log(err)
+//             // res.status(400).json(err)
+//             res.redirect(`/error?error=${err}`)
+//         })
+// })
+
+// router.get('/json', (req, res) => {
+//     // find fruits by ownership, using the req.session info
+//     Fruit.find({ owner: req.session.userId })
+//         .populate('owner', 'username')
+//         .then(fridge => {
+//             // if found, display the fruits
+//             res.status(200).json({ fridge: fridge })
+//         })
+//         .catch(err => {
+//             // otherwise throw an error
+//             console.log(err)
+//             res.status(400).json(err)
+//         })
+// })
 
 // edit route -> GET that takes us to the edit form view
-router.get('/:id/edit', (req, res) => {
+router.get('/edit/:id', (req, res) => {
 	// we need to get the id
 	const fridgeId = req.params.id
 	Fridge.findById(fridgeId)
 		.then(fridge => {
-			res.render(`fridge/edit, ${ fridge, req.session }`)
+			console.log('server is recieving get request')
+			res.render('fridge/edit', { fridge, ...req.session })
 		})
 		.catch((error) => {
+			console.log('server is not recieving get request')
 			res.redirect(`/error?error=${error}`)
 		})
 })
@@ -99,13 +116,20 @@ router.get('/:id/edit', (req, res) => {
 // update route
 router.put('/:id', (req, res) => {
 	const id = req.params.id
-	req.body.ready = req.body.ready === 'on' ? true : false
-
-	Fridge.findByIdAndUpdate(id, req.body, { new: true })
-		.then(id => {
+	// req.body.ready = req.body.ready === 'on' ? true : false
+	Fridge.findByIdAndUpdate(id, req.body)
+		.then(fridge => {
+			if (fridge.owner == req.session.userId){
+				return fridge.updateOne(req.body)
+			} else {
+				res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20edit%20this%20item`)
+			}
+		})
+		then(()=>{
 			res.redirect(`/fridge/${id}`)
 		})
 		.catch((error) => {
+			console.log('server is not recieving get request')
 			res.redirect(`/error?error=${error}`)
 		})
 })
@@ -116,7 +140,7 @@ router.get('/:id', (req, res) => {
 	Fridge.findById(id)
 		.then(fridge => {
             const {username, loggedIn, userId} = req.session
-			res.render('fridge/show', { fridge, username, loggedIn, userId })
+			res.render('fridge/edit', { fridge, ...req.session})
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
@@ -124,20 +148,22 @@ router.get('/:id', (req, res) => {
 })
 
 // delete route
-router.delete('/:id', (req, res) => {
-	const id = req.params.id
-	Fridge.findByIdAndRemove(Id)
+router.delete('fridge/:id', (req, res) => {
+	const fridgeId = req.params.id
+	Fridge.findByIdAndRemove(fridgeId)
 		.then(fridge => {
+			console.log('deleted')
 			if (fridge.owner == req.session.userId){
 				return fridge.deleteOne
 			} else {
 				res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20delete%20this%20item`)
 			}
 		})
-		.then(fridge => {
+		.then(id => {
 			res.redirect('/fridge')
 		})
 		.catch(error => {
+
 			res.redirect(`/error?error=${error}`)
 		})
 })
