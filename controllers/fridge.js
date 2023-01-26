@@ -24,11 +24,11 @@ const router = express.Router()
 // index ALL
 router.get('/', (req, res) => {
 	Fridge.find({})
-		.then(examples => {
+		.then(fridge => {
 			const username = req.session.username
 			const loggedIn = req.session.loggedIn
 			
-			res.render('examples/index', { examples, username, loggedIn })
+			res.render('fridge/index', { fridge, username, loggedIn })
 		})
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)
@@ -36,12 +36,12 @@ router.get('/', (req, res) => {
 })
 
 // index that shows only the user's examples
-router.get('/fridge', (req, res) => {
+router.get('/', (req, res) => {
     // destructure user info from req.session
     const { username, userId, loggedIn } = req.session
 	Fridge.find({ owner: userId })
 		.then(fridge => {
-			res.render('/fridge', { fridge, username, loggedIn })
+			res.render('/fridge/index', { fridge, username, loggedIn })
 		})
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)
@@ -51,31 +51,45 @@ router.get('/fridge', (req, res) => {
 // new route -> GET route that renders our page with the form
 router.get('/new', (req, res) => {
 	const { username, userId, loggedIn } = req.session
-	res.render('examples/new', { username, loggedIn })
+	res.render('fridge/new', { username, loggedIn })
 })
 
-// create -> POST route that actually calls the db and makes a new document
-router.post('/', (req, res) => {
-	req.body.ready = req.body.ready === 'on' ? true : false
-
+// create (fridge/new) -> POST route that actually calls the db and makes a new document
+router.post('/', async (req, res) => {
 	req.body.owner = req.session.userId
-	Fridge.create(req.body)
+	// req.body.ready = req.body.ready === 'on' ? true : false
+	const newItem = req.body
+	console.log('this is req.body aka newItem, after owner\n', newItem)
+	Fridge.create(newItem)
 		.then(fridge => {
-			console.log('this was returned from create', example)
-			res.redirect('/examples')
+			res.redirect(`/fridge/${newItem.id}`)
 		})
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)
 		})
 })
+router.get('/mine', (req, res) => {
+    // find fruits by ownership, using the req.session info
+    Fridge.find({ owner: req.session.userId })
+        .populate('owner', 'username')
+        .then(fridge => {
+            res.render('fruits/index', { fruits, ...req.session })
+        })
+        .catch(err => {
+            // otherwise throw an error
+            console.log(err)
+            // res.status(400).json(err)
+            res.redirect(`/error?error=${err}`)
+        })
+})
 
 // edit route -> GET that takes us to the edit form view
 router.get('/:id/edit', (req, res) => {
 	// we need to get the id
-	const id = req.params.id
-	Fridge.findById(id)
-		.then(example => {
-			res.render('examples/edit', { example })
+	const fridgeId = req.params.id
+	Fridge.findById(fridgeId)
+		.then(fridge => {
+			res.render(`fridge/edit, ${ fridge, req.session }`)
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
@@ -84,12 +98,12 @@ router.get('/:id/edit', (req, res) => {
 
 // update route
 router.put('/:id', (req, res) => {
-	const exampleId = req.params.id
+	const id = req.params.id
 	req.body.ready = req.body.ready === 'on' ? true : false
 
-	Fridge.findByIdAndUpdate(exampleId, req.body, { new: true })
-		.then(example => {
-			res.redirect(`/examples/${example.id}`)
+	Fridge.findByIdAndUpdate(id, req.body, { new: true })
+		.then(id => {
+			res.redirect(`/fridge/${id}`)
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
@@ -98,11 +112,11 @@ router.put('/:id', (req, res) => {
 
 // show route
 router.get('/:id', (req, res) => {
-	const exampleId = req.params.id
-	Fridge.findById(exampleId)
-		.then(example => {
+	const id = req.body.id
+	Fridge.findById(id)
+		.then(fridge => {
             const {username, loggedIn, userId} = req.session
-			res.render('fridge/show', { example, username, loggedIn, userId })
+			res.render('fridge/show', { fridge, username, loggedIn, userId })
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
@@ -111,10 +125,17 @@ router.get('/:id', (req, res) => {
 
 // delete route
 router.delete('/:id', (req, res) => {
-	const exampleId = req.params.id
-	Fridge.findByIdAndRemove(exampleId)
-		.then(example => {
-			res.redirect('/examples')
+	const id = req.params.id
+	Fridge.findByIdAndRemove(Id)
+		.then(fridge => {
+			if (fridge.owner == req.session.userId){
+				return fridge.deleteOne
+			} else {
+				res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20delete%20this%20item`)
+			}
+		})
+		.then(fridge => {
+			res.redirect('/fridge')
 		})
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)

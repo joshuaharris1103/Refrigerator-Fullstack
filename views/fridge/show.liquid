@@ -1,20 +1,36 @@
 {% layout 'layout.liquid' %}
 {% block content %}
-<div class="container-md">
-    <article>
-        <h2>
-            {{ example.title }} -
-            {% if example.ready %}
-            Ready
+<h2 class="m-3">Edit Fridge</h2>
+<div class="container-md"></div>
+    {% if fridge.length > 0 %}
+    <div class="container-md">
+            {% for item in fridge %}
+                <div class="card me-3 mb-3" style="width: 18rem;">
+                    <h5 class="card-header">{{item.item}}</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% if item.quantity > 0 %}
+                                Quantity: {{item.quantity}}
+                                <br>
+                                Date Added: {{item.dateAdded}}
+                                <br>
+                                Expiration Date: {{item.expiration}}
+                            {% else %}
+                                You ran out of {{item.item}}
+                            {% endif %}
+                        </h5>
+                        <a href="fridge/edit" class="btn btn-info">View {{item.name}}<a>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
             {% else %}
-            Not Ready
+            <h2 class="m-3">Your fridge is empty... Go get some groceries!</h2>
+            <a class='m-3 btn btn-info' href="./new">Log New Items Here</a>
             {%endif%}
-        </h2>
-        <h3>Amount: {{ example.amount }}</h3>
-        <h6>Body: {{ example.body }}</h6>
-        {% if example.owner == userId %}
+            </h4>
+        {% if Fridge.owner == userId %}
         <div class="btn-group">
-
             <a href="/examples/{{ example.id }}/edit" class="btn btn-primary">Edit</a>
             <form action="/examples/{{ example.id }}?_method=DELETE" method="POST">
                 <input type="submit" value="Delete" class="btn btn-danger">

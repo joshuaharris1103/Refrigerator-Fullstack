@@ -1,37 +1,40 @@
 {% layout 'layout.liquid' %}
 {% block content %}
 <div class="container-sm">
-    <form action="/examples" method="POST">
+    <form action="/fridge" method="POST">
         <fieldset>
-            <legend>Create New Example</legend>
-            <label class="form-label">Title: </label>
+            <legend>Log New Item</legend>
+			
+            <label class="form-label">Item Name:</label>
             <input 
                 type="text" 
-                name="title" 
-                placeholder="enter example title"
+                name="item" 
+                placeholder="Enter Item Name"
+                class="form-control"
+                required
+            >
+            <label class="form-label">Quantity: </label>
+            <input 
+            type="number" 
+            name="quantity"
+            placeholder="Qty" 
+            class="form-control"
+            required
+            >
+            <label class="form-label">Date Added: </label>
+            <input 
+                type="date" 
+                name="dateAdded"  
                 class="form-control"
             >
-            <label class="form-label">Body:</label>
+            <label class="form-label">Expiration Date: </label>
             <input 
-                type="text" 
-                name="body" 
-                placeholder="enter example body" 
-                class="form-control"
-            >
-            <label class="form-label">Amount:</label>
-            <input 
-                type="number" 
-                name="amount" 
-                class="form-control"
-            >
-            <label class="form-label">Ready:</label>
-            <input 
-                type="checkbox" 
-                name="ready" 
-                class="form-check-input"
+            type="date" 
+            name="expiration" 
+            class="form-control"
             >
         </fieldset>
-        <input type="submit" value="Create New Example" class="btn btn-success">
+        <input type="submit" value="Store in Fridge" class="m-3 btn btn-info">
     </form>
 </div>
 {% endblock %}

@@ -1,43 +1,40 @@
 {% layout 'layout.liquid' %}
 {% block content %}
 <div class="container-sm">
-    <form action="/examples?_method=PUT" method="POST">
+    <form action="/fridge" method="GET">
         <fieldset>
-            <legend>Create New Example</legend>
-            <label class="form-label">Title: </label>
+            <legend>Edit Items</legend>
+			
+            <label class="form-label">Item Name:</label>
             <input 
                 type="text" 
-                name="title" 
-                placeholder="{{ example.title }}"
-                value="{{ example.title }}"
+                name="item" 
+                placeholder="Enter Item Name"
+                class="form-control"
+                required
+            >
+            <label class="form-label">Quantity: </label>
+            <input 
+            type="number" 
+            name="quantity"
+            placeholder="Qty" 
+            class="form-control"
+            required
+            >
+            <label class="form-label">Date Added: </label>
+            <input 
+                type="date" 
+                name="dateAdded"  
                 class="form-control"
             >
-            <label class="form-label">Body:</label>
+            <label class="form-label">Expiration Date: </label>
             <input 
-                type="text" 
-                name="body" 
-                placeholder="{{ example.body }}" 
-                value="{{ example.body }}" 
-                class="form-control"
-            >
-            <label class="form-label">Amount:</label>
-            <input 
-                type="number" 
-                name="amount"
-                value="{{ example.amount }}"
-                class="form-control"
-            >
-            <label class="form-label">Ready:</label>
-            <input 
-                type="checkbox" 
-                name="ready" 
-                class="form-check-input"
-                {% if example.ready %}
-                    checked
-                {% endif %}
+            type="date" 
+            name="expiration" 
+            class="form-control"
             >
         </fieldset>
-        <input type="submit" value="Edit Example" class="btn btn-success">
+        <input type="submit" value="Store in Fridge" class="m-3 btn btn-info">
     </form>
 </div>
 {% endblock %}

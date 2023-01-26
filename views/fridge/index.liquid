@@ -1,27 +1,33 @@
 {% layout 'layout.liquid'%}
 {% block content %}
-<div>
-    <h2 class="display-6">All Examples</h2>
-    <div class="row">
-        {% for example in examples %}
-        <div class="card" style="width: 18rem;">
-            <h5 class="card-header">{{ example.title }}</h5>
-            <div class="card-body">
-                <h5 class="card-title">
-                    Ready?: {{ example.ready }}
-                </h5>
-                <p class="card-text">
-                    Body: {{ example.body }}
-                </p>
-                <p class="card-text">
-                    Amount: {{ example.amount }}
-                </p>
-                <a href="/examples/{{ example.id }}" class="btn btn-info">
-                    View {{ example.title }}
-                </a>
-            </div>
-        </div>
-        {% endfor %}
+<h2 class="m-3">My Fridge</h2>
+{% if fridge.length > 0 %}
+    <div class="container-md">
+            {% for item in fridge %}
+                <div class="card me-3 mb-3" style="width: 18rem;">
+                    <h5 class="card-header">{{item.item}}</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% if item.quantity > 0 %}
+                                Quantity: {{item.quantity}}
+                                <br>
+                                Date Added: {{item.dateAdded}}
+                                <br>
+                                Expiration Date: {{item.expiration}}
+                            {% else %}
+                                You ran out of {{item.item}}
+                            {% endif %}
+                        </h5>
+                        <a href="fridge/edit" class="btn btn-info">View {{item.name}}<a>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
+{% else %}
+    <div class="container-md">
+        <h2 class="m-3">Your fridge is empty... Go get some groceries!</h2>
+        <a class='m-3 btn btn-info' href="fridge/new">Log New Items Here</a>
+    {% endif %}
     </div>
 </div>
 {% endblock %}
