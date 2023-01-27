@@ -1,39 +1,41 @@
 {% layout 'layout.liquid' %}
 {% block content %}
-<div class="container-sm">
-    <form action="/fridge/edit" method="POST">
-        <fieldset>
-            <legend>Edit {{fridgeId}}</legend>
-            <label class="form-label">Item Name:</label>
-            <input 
-                type="text" 
-                name="item" 
-                placeholder="Enter Item Name"
-                class="form-control"
-                required
-            >
-            <label class="form-label">Quantity: </label>
-            <input 
-            type="number" 
-            name="quantity"
-            placeholder="Qty" 
-            class="form-control"
-            required
-            >
-            <label class="form-label">Date Added: </label>
-            <input 
-                type="date" 
-                name="dateAdded"  
-                class="form-control"
-            >
-            <label class="form-label">Expiration Date: </label>
-            <input 
-            type="date" 
-            name="expiration" 
-            class="form-control"
-            >
-        </fieldset>
-        <input type="submit" value="Make Edit" class="m-3 btn btn-info">
+  <div class="container-sm">
+    <form action="/fridge?_method=PUT" method="POST">
+      <fieldset>
+        <legend>Edit {{ fridgeId }}</legend>
+        <label class="form-label">Item Name:</label>
+        <input
+          type="text"
+          name="item"
+          placeholder="Enter Item Name"
+          class="form-control"
+          required>
+        <label class="form-label">Quantity:
+        </label>
+        <input
+          type="number"
+          name="quantity"
+          placeholder="Qty"
+          class="form-control"
+          required>
+        <label class="form-label">Date Added:
+        </label>
+        <input
+          type="date"
+          name="dateAdded"
+          class="form-control">
+        <label class="form-label">Expiration Date:
+        </label>
+        <input
+          type="date"
+          name="expiration"
+          class="form-control">
+      </fieldset>
+      <input
+        type="submit"
+        value="Make Edit"
+        class="m-3 btn btn-info">
     </form>
-</div>
+  </div>
 {% endblock %}

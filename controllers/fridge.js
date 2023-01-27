@@ -68,9 +68,21 @@ router.post('/', async (req, res) => {
 		})
 })
 
-// edit route -> GET that takes us to the edit form view
+// This Get route allows us to SEE edit page
+router.get('/:id', (req, res) => {
+	const id = req.body.id
+	Fridge.findById(id)
+		.then(fridge => {
+			const {username, loggedIn, userId} = req.session
+			res.render('fridge/edit', { fridge, ...req.session})
+		})
+		.catch((error) => {
+			res.redirect(`/error?error=${error}`)
+		})
+})
+
+// PUT route used to update sepcific item
 router.get('/:id/edit', (req, res) => {
-	// we need to get the id
 	const fridgeId = req.body.id
 	Fridge.findById(fridgeId)
 		.then(fridge => {
@@ -81,9 +93,11 @@ router.get('/:id/edit', (req, res) => {
 		})
 })
 
-// update route
+// PUT route used to update sepcific item
 router.put('/:id', (req, res) => {
 	const id = req.params.id
+	console.log(req.body)
+	// const fridgeId = req.body.id
 	// req.body.ready = req.body.ready === 'on' ? true : false
 	Fridge.findByIdAndUpdate(id, req.body)
 		.then(fridge => {
@@ -93,26 +107,14 @@ router.put('/:id', (req, res) => {
 				res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20edit%20this%20item`)
 			}
 		})
-		then(()=>{
-			res.redirect(`/fridge/${Fridge}`)
+		.then(()=>{
+			res.redirect(`/fridge`)
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
 		})
 })
 
-// show route (fridge/edit)
-router.get('/:id', (req, res) => {
-	const id = req.body.id
-	Fridge.findById(id)
-		.then(fridge => {
-            const {username, loggedIn, userId} = req.session
-			res.render('fridge/edit', { fridge, ...req.session})
-		})
-		.catch((error) => {
-			res.redirect(`/error?error=${error}`)
-		})
-})
 
 // delete route
 router.delete('/:id', (req, res) => {
