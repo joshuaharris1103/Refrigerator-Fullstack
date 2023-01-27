@@ -21,7 +21,7 @@ const router = express.Router()
 
 // Routes
 
-// Home Screen
+// Home Screen for non user
 router.get('/', (req, res) => {
 	Fridge.find({})
 		.then(fridge => {
@@ -35,8 +35,21 @@ router.get('/', (req, res) => {
 		})
 })
 
-//(edit page???)
-router.get('/', (req, res) => {
+router.get('/json', (req, res) => {
+	Fridge.find({})
+		.then(fridge => {
+			const username = req.session.username
+			const loggedIn = req.session.loggedIn
+			
+			res.json(fridge)
+		})
+		.catch(error => {
+			res.redirect(`/error?error=${error}`)
+		})
+})
+
+// Homescreen for user
+router.get('/:owner/fridge', (req, res) => {
     const { username, userId, loggedIn } = req.session
 	Fridge.find({ owner: userId })
 		.then(fridge => {
@@ -54,19 +67,20 @@ router.get('/new', (req, res) => {
 })
 
 // create (fridge/new) -> POST route that actually calls the db and makes a new document
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
 	req.body.owner = req.session.userId
 	// req.body.ready = req.body.ready === 'on' ? true : false
 	const newItem = req.body
-	console.log('this is req.body aka newItem, after owner\n', newItem)
 	Fridge.create(newItem)
-		.then(fridge => {
+	.then(fridge => {
+			console.log('this is req.body aka newItem, after owner\n', fridge)
 			res.redirect(`fridge/`)
 		})
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)
 		})
 })
+
 
 // This Get route allows us to SEE edit page
 router.get('/:id', (req, res) => {
@@ -81,7 +95,7 @@ router.get('/:id', (req, res) => {
 		})
 })
 
-// PUT route used to update sepcific item
+
 router.get('/:id/edit', (req, res) => {
 	const fridgeId = req.body.id
 	Fridge.findById(fridgeId)
@@ -94,12 +108,12 @@ router.get('/:id/edit', (req, res) => {
 })
 
 // PUT route used to update sepcific item
-router.put('/:id', (req, res) => {
+router.put('/:id/edit', (req, res) => {
 	const id = req.params.id
 	console.log(req.body)
 	// const fridgeId = req.body.id
 	// req.body.ready = req.body.ready === 'on' ? true : false
-	Fridge.findByIdAndUpdate(id, req.body)
+	Fridge.findOneAndUpdate(id, req.body)
 		.then(fridge => {
 			if (fridge.owner == req.session.userId){
 				return fridge.updateOne(req.body)
@@ -119,11 +133,12 @@ router.put('/:id', (req, res) => {
 // delete route
 router.delete('/:id', (req, res) => {
 	const fridgeId = req.params.id
-	Fridge.findByIdAndRemove(fridgeId)
+	Fridge.findById(fridgeId)
 		.then(fridge => {
 			console.log('deleted')
 			if (fridge.owner == req.session.userId){
-				return fridge.deleteOne
+				console.log('delete if statement hit')
+				return fridge.deleteOne()
 			} else {
 				res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20delete%20this%20item`)
 			}
