@@ -23,7 +23,7 @@ const router = express.Router()
 
 // Home Screen for non user
 router.get('/', (req, res) => {
-	Fridge.find({})
+	Fridge.find({ owner: req.session.userId })		
 		.then(fridge => {
 			const username = req.session.username
 			const loggedIn = req.session.loggedIn
@@ -82,7 +82,7 @@ router.post('/', (req, res) => {
 })
 
 
-// This Get route allows us to SEE edit page
+// This Get route allows us to SEE edit form
 router.get('/:id', (req, res) => {
 	const id = req.body.id
 	Fridge.findById(id)
@@ -110,18 +110,19 @@ router.get('/:id/edit', (req, res) => {
 // PUT route used to update sepcific item
 router.put('/:id/edit', (req, res) => {
 	const id = req.params.id
-	console.log(req.body)
 	// const fridgeId = req.body.id
 	// req.body.ready = req.body.ready === 'on' ? true : false
-	Fridge.findOneAndUpdate(id, req.body)
+	Fridge.findById(id)
 		.then(fridge => {
+			console.log('This item was found')
 			if (fridge.owner == req.session.userId){
-				return fridge.updateOne(req.body)
+				console.log('this item has been updated')
+				return fridge.updateOne(id)
 			} else {
 				res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20edit%20this%20item`)
 			}
 		})
-		.then(()=>{
+		.then(() => {
 			res.redirect(`/fridge`)
 		})
 		.catch((error) => {

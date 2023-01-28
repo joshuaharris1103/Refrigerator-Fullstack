@@ -3,7 +3,7 @@
   <div class="container-sm">
     <form action="/fridge?_method=PUT" method="POST">
       <fieldset>
-        <legend>Edit {{ fridgeId }}</legend>
+        <legend>Edit {{ item.item }}</legend>
         <label class="form-label">Item Name:</label>
         <input
           type="text"
@@ -32,10 +32,9 @@
           name="expiration"
           class="form-control">
       </fieldset>
-      <input
-        type="submit"
-        value="Make Edit"
-        class="m-3 btn btn-info">
-    </form>
+        <input type="submit" class="m-3 btn btn-info" value="Make Edit">
+        <br>
+        <a href="/fridge" class="m-3 btn btn-warning"> Back </a>
+      </form>
   </div>
 {% endblock %}
