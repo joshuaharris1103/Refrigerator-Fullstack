@@ -96,7 +96,7 @@ router.get('/:id', (req, res) => {
 })
 
 
-router.get('/:id/edit', (req, res) => {
+router.get('/edit/:id', (req, res) => {
 	const fridgeId = req.body.id
 	Fridge.findById(fridgeId)
 		.then(fridge => {
@@ -108,7 +108,7 @@ router.get('/:id/edit', (req, res) => {
 })
 
 // PUT route used to update sepcific item
-router.put('/:id/edit', (req, res) => {
+router.put('/edit/:id', (req, res) => {
 	const id = req.params.id
 	// const fridgeId = req.body.id
 	// req.body.ready = req.body.ready === 'on' ? true : false
@@ -116,14 +116,14 @@ router.put('/:id/edit', (req, res) => {
 		.then(fridge => {
 			console.log('This item was found')
 			if (fridge.owner == req.session.userId){
-				console.log('this item has been updated')
 				return fridge.updateOne(id)
 			} else {
 				res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20edit%20this%20item`)
 			}
 		})
 		.then(() => {
-			res.redirect(`/fridge`)
+			res.redirect(`/fridge/edit`)
+			console.log('this item has been updated')
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)

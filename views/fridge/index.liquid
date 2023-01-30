@@ -18,7 +18,9 @@
                                 You ran out of {{item.item}}
                             {% endif %}
                         </h5>
-                        <a href="fridge/edit" class="btn btn-info"> Edit <a>
+                        <form action="/fridge/edit/{{item.id}}?_method=PUT" method="POST">
+                            <input type="submit" class="btn btn-info" value="Edit">
+                        </form>
                         <form action="/fridge/{{item.id}}?_method=DELETE" method="POST">
                             <input type="submit" class="btn btn-danger" value="Delete">
                         </form>
