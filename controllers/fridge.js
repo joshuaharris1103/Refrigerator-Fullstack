@@ -1,5 +1,6 @@
 // Import Dependencies
 const express = require('express')
+const { findOneAndUpdate } = require('../models/fridge')
 const Fridge = require('../models/fridge')
 
 // Create router
@@ -109,16 +110,16 @@ router.get('/edit/:id', (req, res) => {
 
 // PUT route used to update sepcific item
 router.put('/edit/:id', (req, res) => {
-	const id = req.params.id
+	const fridgeId = req.params.id
 	// const fridgeId = req.body.id
-	// req.body.ready = req.body.ready === 'on' ? true : false
-	Fridge.findById(id)
+	Fridge.findById(fridgeId)
 		.then(fridge => {
 			console.log('This item was found')
-			if (fridge.owner == req.session.userId){
-				return fridge.updateOne(id)
+			if (req.session.userId){
+				return fridge.updateOne(req.body)
 			} else {
-				res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20edit%20this%20item`)
+				// res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20edit%20this%20item`)
+				console.log('this is the redirect')
 			}
 		})
 		.then(() => {

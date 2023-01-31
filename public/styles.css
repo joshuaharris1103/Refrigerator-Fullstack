@@ -1,3 +1,138 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    font-family: sans-serif;
+    background-color: #8eb7cb;
+    /* color: #fff; */
+}
+.fridge{
+   position: relative;
+   width: 250px;
+   margin: 100px auto 10px;
+   height: auto;
+   border: 4px solid #555455;
+   background: #fff;
+   display: block; 
+}
+.fridge:before, .fridge:after {
+    position: absolute;
+    content: '';
+    width: 8px;
+    height: 0;
+    bottom:-8px;
+    border: 4px solid transparent;
+    border-top-color: #555455;
+    border-bottom-width: 0;
+}
+.fridge:before{
+    left: 14px;
+}
+.fridge:after{
+    right: 14px;
+    box-shadow: 0 -405px 0 1px #555455
+}
+.fridge .freezer, .fridge .body{
+    position: relative;
+    background: #d7e4e7;
+    background-image: linear-gradient(to right, #96a4aa 25%, #b3c5cd 15%);
+    transform-origin: right;
+    transition: all 0.5s ease-in-out;
+}
+
+.fridge .freezer:before, .fridge .body:before, .fridge .freezer:after, .fridge .body:after {
+    position: absolute;
+    content: '';
+    top: 7px;
+    right: 10px;
+    width: 5px;
+    height: 45px;
+    border-radius: 5px;
+    background: #fff;
+    transition: all 0.5s ease-in-out;
+}
+
+.fridge .freezer{
+    height: 95px;
+    border-bottom:4px solid #555455
+}
+
+.fridge .freezer .handle{
+    top: 20px;
+}
+
+.fridge .body{
+    height: 300px;
+}
+.fridge .body:before{
+    top: 62px;
+    height: auto;
+    bottom: 7px;
+}
+.fridge .body .handle{
+    top: 20px;
+    bottom: 170px;
+}
+.handle {
+    position: absolute;
+    top: 0;
+    bottom: 10px;
+    left: 15px;
+    width: 5px;
+    border: 3px solid #555455;
+    border-radius: 5px;
+    background: #71b5e6;
+    box-sizing: content-box;
+    transition: all 0.5s ease-in-out;
+}
+
+.open-door{
+    transform:perspective(1200px) translateZ(0px) translateX(0px) translateY(0px) rotateY(120deg);
+}
+
+.open-door .handle .open-door:before .open-door:after{
+    opacity: 0;
+}
+
+.shelf{
+    position: absolute;
+    width: 172px;
+    z-index: 0;
+    border-bottom: 10px solid #b3c5cd;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    top: 35px;
+}
+
+.shelf:after{
+    content:'';
+    background:#686868;
+    height: 5px;
+    width: 172px;
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    right: 0;
+    margin: 0 -20px;
+}
+
+.shelf:nth-child(2) {
+    top: 70px;
+}
+.shelf:nth-child(3) {
+    top: 130px;
+}
+.shelf:nth-child(4) {
+    top: 170px;
+}
+.shelf:nth-child(5) {
+    top: 210px;
+}
+.shelf:nth-child(6) {
+    top: 250px;
+}
+
+
 .nav-link {
     display: inline-block;
     position: relative;
