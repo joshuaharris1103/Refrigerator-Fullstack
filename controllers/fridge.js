@@ -6,20 +6,6 @@ const Fridge = require('../models/fridge')
 // Create router
 const router = express.Router()
 
-// Router Middleware
-// Authorization middleware
-// If you have some resources that should be accessible to everyone regardless of loggedIn status, this middleware can be moved, commented out, or deleted. 
-// router.use((req, res, next) => {
-// 	// checking the loggedIn boolean of our session
-// 	if (req.session.loggedIn) {
-// 		// if they're logged in, go to the next thing(thats the controller)
-// 		next()
-// 	} else {
-// 		// if they're not logged in, send them to the login page
-// 		res.redirect('/auth/login')
-// 	}
-// })
-
 // Routes
 
 // Home Screen for non user
@@ -49,7 +35,7 @@ router.get('/json', (req, res) => {
 		})
 })
 
-// Homescreen for user
+// // Homescreen for user
 router.get('/:owner/fridge', (req, res) => {
     const { username, userId, loggedIn } = req.session
 	Fridge.find({ owner: userId })
@@ -61,13 +47,13 @@ router.get('/:owner/fridge', (req, res) => {
 		})
 })
 
-// GET route that renders our page with the form for new items
+// // GET route that renders our page with the form for new items
 router.get('/new', (req, res) => {
 	const { username, userId, loggedIn } = req.session
 	res.render('fridge/new', { username, loggedIn })
 })
 
-// create (fridge/new) -> POST route that actually calls the db and makes a new document
+// // CREATE (fridge/new) -> POST route that actually calls the db and makes a new document
 router.post('/', (req, res) => {
 	req.body.owner = req.session.userId
 	// req.body.ready = req.body.ready === 'on' ? true : false
@@ -83,53 +69,61 @@ router.post('/', (req, res) => {
 })
 
 
-// This Get route allows us to SEE edit form
+// // This Get route allows us to SEE edit form for specific item
 router.get('/:id', (req, res) => {
-	const id = req.body.id
-	Fridge.findById(id)
-		.then(fridge => {
-			const {username, loggedIn, userId} = req.session
-			res.render('fridge/edit', { fridge, ...req.session})
-		})
-		.catch((error) => {
-			res.redirect(`/error?error=${error}`)
-		})
-})
-
-
-router.get('/edit/:id', (req, res) => {
 	const fridgeId = req.body.id
 	Fridge.findById(fridgeId)
 		.then(fridge => {
-			res.render('/edit', { fridge, ...req.session })
+			const {username, loggedIn, userId} = req.session
+			res.render('fridge/edit', { fridge, ...req.session})
+			console.log('EDIT FORM HAS BEEN CREATED')
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
 		})
 })
-
-// PUT route used to update sepcific item
+// // PUT route used to update sepcific item
 router.put('/edit/:id', (req, res) => {
 	const fridgeId = req.params.id
-	// const fridgeId = req.body.id
+	console.log('this id is:', fridgeId)
 	Fridge.findById(fridgeId)
 		.then(fridge => {
-			console.log('This item was found')
-			if (req.session.userId){
-				return fridge.updateOne(req.body)
+			if (fridge.owner == req.session.userId){
+				console.log('This item was successfully updated')
+				return Fridge.findOneAndUpdate(req.body)
 			} else {
-				// res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20edit%20this%20item`)
+				res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20edit%20this%20item`)
 				console.log('this is the redirect')
 			}
 		})
 		.then(() => {
-			res.redirect(`/fridge/edit`)
+			res.redirect(`/fridge/edit/${fridgeId}`)
 			console.log('this item has been updated')
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
 		})
 })
+
+router.get('/edit/:id', (req, res) => {
+	const fridgeId = req.params.id
+	Fridge.findById(fridgeId)
+		.then(fridge => {
+			console.log('ITEM EDIT HAS BEEN MADE')
+			res.redirect(`../${fridgeId}`)
+		})
+		.catch((error) => {
+			console.log('ITEM EDIT HAS FAILED')
+			res.redirect(`/error?error=${error}`)
+		})
+})
+// router.get('fridge/item', (req, res) => {
+// 	res.json('hello world')
+// 	const { username, userId, loggedIn } = req.session
+// 	res.render('fridge/item', { username, loggedIn })
+// })
+
+
 
 
 // delete route
@@ -152,6 +146,105 @@ router.delete('/:id', (req, res) => {
 			res.redirect(`/error?error=${error}`)
 		})
 })
+
+//SHOW
+// router.get("/:id", (req, res) => {
+//     const id = req.params.id
+//     Fridge.findById(id)
+// 		.populate('username')
+//         .then(fridge => {
+//             res.json({ fridge: fridge})
+//         })
+// 		.catch((error) => {
+// 			res.redirect(`/error?error=${error}`)
+// 		})
+// })
+
+// // // INDEX route 
+// router.get('/', (req, res) => {
+//     Fridge.find({})
+//         .then(fridge => { res.json({ fridge: fridge })})
+//         .catch((error) => {
+// 		res.redirect(`/error?error=${error}`)
+// 	})
+// })
+
+// // CREATE route
+// // Create -> receives a request body, and creates a new document in the database
+// router.post('/', (req, res) => {
+// 	req.body.owner = req.session.userId
+// 	const newItem = req.body
+// 	Fridge.create(newItem)
+// 	.then(fridge => {
+// 			console.log('this is req.body aka newItem, after owner\n', fridge)
+// 			res.redirect(`fridge/`)
+// 		})
+// 		.catch(error => {
+// 			res.redirect(`/error?error=${error}`)
+// 		})
+// })
+
+// // GET route
+// // Index -> This is a user specific index route
+// router.get('/mine', (req, res) => {
+//     Fridge.find({ owner: req.session.userId })
+//         .then(fridge => {
+//             res.status(200).json({ fridge: fridge })
+//         })
+// 		.catch(error => {
+// 			res.redirect(`/error?error=${error}`)
+// 		})
+// })
+
+// // PUT route
+// router.put('/:id', (req, res) => {
+//     const id = req.params.id
+//     Fridge.findById(id)
+//         .then(fridge => {
+// 			if(Fridge.find({"name": "name"})){
+
+// 			}
+//             if (fridge.owner == req.session.userId) {
+//                 res.sendStatus(204)
+//                 return fridge.updateOne(req.body)
+//             } else {
+//                 res.sendStatus(401)
+//             }
+//         })
+// 		.catch((error) => {
+// 			res.redirect(`/error?error=${error}`)
+//         })
+// })
+
+// // DELETE route
+// router.delete('/:id', (req, res) => {
+//     const id = req.params.id
+//     Fridge.findById(id)
+//         .then(fridge => {
+//             if (fridge.owner == req.session.userId) {
+//                 res.sendStatus(204)
+//                 return fridge.deleteOne()
+//             } else {
+//                 res.sendStatus(401)
+//             }
+//         })
+//         .catch((error) => {
+// 			res.redirect(`/error?error=${error}`)
+//         })
+// })
+
+// // SHOW route
+// // Read -> finds and displays a single resource
+// router.get('/:id', (req, res) => {
+//     const id = req.params.id
+//     Fridge.findById(id)
+//         .then(fridge => {
+//             res.json({ fridge: fridge })
+//         })
+//         .catch((error) => {
+// 			res.redirect(`/error?error=${error}`)
+//         })
+// })
 
 // Export the Router
 module.exports = router

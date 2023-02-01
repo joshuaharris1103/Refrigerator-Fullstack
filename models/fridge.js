@@ -31,7 +31,7 @@ const fridgeSchema = new Schema(
 			type: Date,
 			required: true },
 		owner: {
-			type: Schema.Types.ObjectID,
+			type: Schema.Types.ObjectId,
 			ref: 'User',
 		},
 		note: [noteSchema]

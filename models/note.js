@@ -1,11 +1,8 @@
 // /////////////////////////////////////////////////////////
 // //// Our schema for the comment subdocument          ////
 // /////////////////////////////////////////////////////////
-// const express = require('express')
-// const Fridge = require('../models/fridge')
 // const mongoose = require('../utils/middleware')
 
-// const router = express.Router()
 // // All we need from mongoose, to build subdocuments
 // // is the schema constructor. 
 // // SUBDOCUMENTS ARE NOT MONGOOSE MODELS.
@@ -16,6 +13,11 @@
 // const noteSchema = new Schema({
 //     note: {
 //         type: String,
+//         required: true
+//     },
+//     owner: {
+//         type: Schema.Types.ObjectId,
+//         ref: 'User',
 //         required: true
 //     }
 // }, {

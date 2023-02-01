@@ -1,8 +1,10 @@
 {% layout 'layout.liquid' %}
 {% block content %}
   <div class="container-sm">
+    <form action="/fridge/edit/{{ fridge.id }}?_method=PUT" method="POST">
       <fieldset>
-        <legend>Edit{{item.item}}</legend>
+        <legend class="my-3"> Edit {{ item.name }}
+        </legend>
         <label class="form-label">Item Name:</label>
         <input
           type="text"
@@ -10,31 +12,32 @@
           placeholder="Enter Item Name"
           class="form-control"
           required>
-        <label class="form-label">Quantity:
-        </label>
+        <label class="form-label">Quantity:</label>
         <input
           type="number"
           name="quantity"
           placeholder="Qty"
           class="form-control"
           required>
-        <label class="form-label">Date Added:
-        </label>
+        <label class="form-label">Date Added:</label>
         <input
           type="date"
           name="dateAdded"
           class="form-control">
-        <label class="form-label">Expiration Date:
-        </label>
+        <label class="form-label">Expiration Date:</label>
         <input
           type="date"
           name="expiration"
           class="form-control">
       </fieldset>
-      <form action="/fridge/edit/{{item.id}}?_method=PUT" method="POST">
-        <input type="submit" class="m-3 btn btn-info" value="Make Edit">
-        <br>
-        <a href="/fridge" class="m-3 btn btn-warning"> Back </a>
-      </form>
+      <input
+        type="submit"
+        class="m-3 btn btn-info"
+        value="Make Edit {{ item.name }}">
+      <br>
+      <a href="/fridge" class="m-3 btn btn-warning">
+        Back
+      </a>
+    </form>
   </div>
 {% endblock %}

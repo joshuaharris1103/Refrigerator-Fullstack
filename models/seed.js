@@ -2,7 +2,8 @@
 //// Import Dependencies         ////
 /////////////////////////////////////
 const mongoose = require('../utils/connection')
-const Fruit = require('./fridge')
+const Fridge = require('./fridge')
+
 
 /////////////////////////////////////
 //// Seed Script code            ////
@@ -19,9 +20,9 @@ db.on('open', () => {
        
     ]
    
-    Fruit.deleteMany({ owner: null })
+    Fridge.deleteMany({ owner: null })
         .then(() => {
-            Fruit.create(fridgeFruits)
+            Fridge.create(fridgeFruits)
                 .then(data => {
                     console.log('here are the created items: \n', data)
                     db.close()
