@@ -19,6 +19,26 @@ The Refrigerator App will let a user be able to track expiration and what items 
 ![image](https://user-images.githubusercontent.com/106713788/216140368-1596771b-5648-4b32-80b0-439a15e2d67f.png)
 ![image](https://user-images.githubusercontent.com/106713788/216140406-bfef0f0a-6e3f-4e2d-83f6-bf1bfadc03b4.png)
 
+## Routes Table
+
+#### Fridge
+
+| **URL**          | **HTTP Verb**|**Action**|
+|------------------|--------------|----------|
+| /fridge/         | GET          | index  
+| /fridge/:id      | GET          | show       
+| /fridge/new      | GET          | new   
+| /fridge          | POST         | create   
+| /fridge/:id/edit | GET          | edit       
+| /fridge/:id      | PATCH/PUT    | update    
+| /fridge/:id      | DELETE       | destroy  
+
+### Users
+| **URL**          | **HTTP Verb**|**Action**|
+|------------------|--------------|----------|
+| /auth/signup    | POST         | create  
+| /auth/login     | POST         | create       
+| /auth/logout    | DELETE       | destroy  
 
 
 
