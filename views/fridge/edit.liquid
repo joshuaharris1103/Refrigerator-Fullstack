@@ -1,9 +1,9 @@
 {% layout 'layout.liquid' %}
 {% block content %}
   <div class="container-sm">
-    <form action="/fridge/edit/{{ fridge.id }}?_method=PUT" method="POST">
+    <form action="/fridge/{{ fridge._id }}?_method=PUT" method="POST">
       <fieldset>
-        <legend class="my-3"> Edit {{ item.name }}
+        <legend class="my-3"> Edit {{ fridge.item }}
         </legend>
         <label class="form-label">Item Name:</label>
         <input
@@ -33,7 +33,7 @@
       <input
         type="submit"
         class="m-3 btn btn-info"
-        value="Make Edit {{ item.name }}">
+        value="Make Edit">
       <br>
       <a href="/fridge" class="m-3 btn btn-warning">
         Back
