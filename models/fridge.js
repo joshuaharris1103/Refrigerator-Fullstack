@@ -13,20 +13,12 @@ const fridgeSchema = new Schema(
 		item: { 
 			type: String,
 			required: true },
-		// description: { 
-		// 	type: String},
         quantity: { 
 			type: Number,
 			required: true },
-		// readyForUse: { 
-		// 	type: Boolean,
-		// 	required: true },
 		dateAdded: { 
 			type: Date,
 			required: true },
-		// timeRefrigerated: { 
-		// 	type: Date,
-		// 	required: true },
 		expiration: { 
 			type: Date,
 			required: true },
