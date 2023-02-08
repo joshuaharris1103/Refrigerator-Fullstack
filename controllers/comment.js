@@ -13,7 +13,7 @@ const router = express.Router()
 //// Routes               ////
 //////////////////////////////
 
-router.post('/:fridgeId', (req, res) => {
+router.post('/:id', (req, res) => {
     const fridgeId = req.params.fridgeId
     console.log('this is the session\n', req.session)
     if (req.session.loggedIn) {
@@ -32,7 +32,7 @@ router.post('/:fridgeId', (req, res) => {
                 res.redirect(`/error?error=${err}`)
             })
     } else {
-        res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20comment%20on%20this%20fruit`)
+        res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20comment%20on%20this%20item`)
     }
 })
 

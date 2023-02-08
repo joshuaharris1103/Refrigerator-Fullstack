@@ -68,7 +68,7 @@ router.post('/', (req, res) => {
 	Fridge.create(req.body)
 		.then(fridge => {
 			console.log('this was returned from create', fridge)
-			res.redirect('/fridge')
+			res.redirect(`/fridge/${fridge.id}`)
 		})
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)
@@ -80,7 +80,7 @@ router.get('/:id/edit', (req, res) => {
 	const fridgeId = req.params.id
 	Fridge.findById(fridgeId)
 		.then(fridge => {
-			res.render('fridge/edit', { fridge })
+			res.render('fridge/edit', { fridge, ...req.session })
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
@@ -90,11 +90,11 @@ router.get('/:id/edit', (req, res) => {
 // update route
 router.put('/:id', (req, res) => {
 	const fridgeId = req.params.id
-	// req.body.ready = req.body.ready === 'on' ? true : false
+	req.body.ready = req.body.ready === 'on' ? true : false
 
 	Fridge.findByIdAndUpdate(fridgeId, req.body, { new: true })
 		.then(fridge => {
-			res.redirect(`/fridge/`)
+			res.redirect(`/fridge/${fridge.id}`)
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
@@ -109,7 +109,7 @@ router.get('/:id', (req, res) => {
 	.populate('comments.author', '-password')
 		.then(fridge => {
             const {username, loggedIn, userId} = req.session
-			res.render('fridge/show', { fridge, username, loggedIn, userId })
+			res.render(`fridge/show.liquid`, { fridge, username, loggedIn, userId })
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
