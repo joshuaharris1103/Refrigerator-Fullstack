@@ -1,21 +1,20 @@
-{% layout 'layout.liquid' %}
+{% layout 'layout.liquid'%}
 {% block content %}
-<h2 class="m-3">Notes Log</h2>
-<h4 class="mx-5">Click the item name to view your item info</h4>
-{% if fridge.length > 0 %}
+<h2 class="m-3"> Notes Log </h2>
+{% if loggedIn %}
 <div class="container-md">
     {% for item in fridge %}
-    <div class="g-col-4 card me-3 mb-3 " style="width: 40%;">
+    <div class="g-col-4 card me-3 mb-3 " style="width: 45%;">
         <div class="card-body">
-            <h4 class="mb-3 card-header">{{item.item}}</h4>
-            {% if item.quantity > 0 %}
-            Quantity: {{item.quantity}}
+            <h4 class="mb-3 card-header">{{ item.item }}</h4>
+            {% if loggedIn %}
+            Quantity: {{ item.quantity }}
             <br>
-            Date Added: {{item.dateAdded | date: "%A, %B %e, %Y" }}
+            Date Added: {{ item.dateAdded | date: "%A, %B %e, %Y" }}
             <br>
-            Expiration Date: {{item.expiration | date: "%A, %B %e, %Y" }}
+            Expiration Date: {{ item.expiration | date: "%A, %B %e, %Y" }}
             {% else %}
-            You ran out of {{item.item}}
+            You ran out of {{ item.item}}
             {% endif %}
             </h5>
         </div>
