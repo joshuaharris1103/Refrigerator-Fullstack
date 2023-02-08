@@ -1,24 +1,44 @@
 {% layout 'layout.liquid' %}
 {% block content %}
 
-<div class="container-sm">
+  <div class="container-sm">
     <form action="/auth/signup" method="POST">
-        <fieldset>
-            <legend>Create your FridgeID</legend>
+      <fieldset>
+        <legend>Create your FridgeID</legend>
 
-            <label class="form-label">Email: </label>
-            <input type="text" name="email" placeholder="email@address.com" class="mb-3 form-control" required>
+        <label class="form-label">Email:
+        </label>
+        <input
+          type="text"
+          name="email"
+          placeholder="email@address.com"
+          class="mb-3 form-control"
+          required>
 
-            <label class="form-label">Username: </label>
-            <input type="text" name="username" placeholder="Username" class="mb-3 form-control" required>
+        <label class="form-label">Username:
+        </label>
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          class="mb-3 form-control"
+          required>
 
-            <label class="form-label">Password</label>
-            <input type="password" name="password" placeholder="Password" class="mb-3 form-control" required>
-        </fieldset>
-        <input type="submit" value="Create Account" class="mb-3 btn btn-success">
+        <label class="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          class="mb-3 form-control"
+          required>
+      </fieldset>
+      <input
+        type="submit"
+        value="Create Account"
+        class="mb-3 btn btn-success">
     </form>
     <a href="/auth/login">Already Have Account</a>
-</div>
+  </div>
 
 
 {% endblock %}

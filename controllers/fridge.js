@@ -1,5 +1,6 @@
 // Import Dependencies
 const express = require('express')
+const { Schema } = require('mongoose')
 const Fridge = require('../models/fridge')
 
 // Create router
@@ -11,6 +12,8 @@ const router = express.Router()
 // index ALL
 router.get('/', (req, res) => {
 	Fridge.find({})
+	.populate('owner', 'username')
+	.populate('comments.author', '-password')
 		.then(fridge => {
 			const username = req.session.username
 			const loggedIn = req.session.loggedIn
@@ -24,6 +27,8 @@ router.get('/', (req, res) => {
 
 router.get('/json', (req, res) => {
 	Fridge.find({})
+		.populate('owner', 'username')
+		.populate('comments.author', '-password')
 		.then(fridge => {
 			const username = req.session.username
 			const loggedIn = req.session.loggedIn
@@ -39,7 +44,8 @@ router.get('/json', (req, res) => {
 router.get('/mine', (req, res) => {
     // destructure user info from req.session
 	Fridge.find({ owner: req.session.userId })
-		.populate('owner', 'username')
+	.populate('owner', 'username')
+	.populate('comments.author', '-password')
 		.then(fridge => {
 			res.render('fridge/index', { fridge, ...req.session})
 		})
@@ -99,6 +105,8 @@ router.put('/:id', (req, res) => {
 router.get('/:id', (req, res) => {
 	const fridgeId = req.params.id
 	Fridge.findById(fridgeId)
+	.populate('owner', 'username')
+	.populate('comments.author', '-password')
 		.then(fridge => {
             const {username, loggedIn, userId} = req.session
 			res.render('fridge/show', { fridge, username, loggedIn, userId })
