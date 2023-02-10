@@ -3,9 +3,9 @@
     <div class="card-body">
       <p>{{ comm.note }}</p>
       <div class="d-flex justify-content-between">
-        <small>author: {{ comm.author.username }}</small>
+        <small>Author: {{ comm.author.username }}</small>
         {% if comm.author == userId %}
-          <form action="/comments/delete/{{ fridge.id }}/{{ comm.id }}?_method=DELETE" method="POST">
+          <form action="/comment/delete/{{ fridge.id }}/{{ comm.id }}?_method=DELETE" method="POST">
             <input
               class="btn btn-danger"
               type="submit"

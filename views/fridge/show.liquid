@@ -38,7 +38,7 @@
     <hr>
     {% if loggedIn %}
       <div class="col-md-6">
-        <form action="/fridge/{{ fridge.id }}/" method="POST">
+        <form action="/comment/{{ fridge.id }}/" method="POST">
           <fieldset>
             <legend>Add a Note</legend>
             <label class="form-label">Input Text Below:
@@ -62,7 +62,9 @@
     <hr>
     {% if fridge.comments.length > 0 %}
       <div class="container-sm justify-content-center">
-        {% render '../comment.liquid', comm: comm, userId: userId, fridge: fridge %}
+        {% for comm in fridge.comments %}
+          {% render '../comment.liquid', comm: comm, userId: userId, fridge: fridge %}
+        {% endfor %}
       </div>
     {% else %}
       <small>No notes yet...</small>
