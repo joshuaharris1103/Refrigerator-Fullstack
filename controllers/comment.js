@@ -2,7 +2,7 @@
 //// Import Dependencies         ////
 /////////////////////////////////////
 const express = require('express')
-const Fridge = require('../models/properties')
+const Fridge = require('../models/fridge')
 
 /////////////////////////////////////
 //// Create Router               ////
@@ -14,7 +14,7 @@ const router = express.Router()
 //////////////////////////////
 
 router.post('/:id', (req, res) => {
-    const fridgeId = req.params.fridgeId
+    const fridgeId = req.params.id
     console.log('this is the session\n', req.session)
     if (req.session.loggedIn) {
         req.body.author = req.session.userId

@@ -5,32 +5,30 @@
   </h2>
   {% if loggedIn %}
     <div class="container-md">
-      {% for item in fridge %}
-        <div class="g-col-4 card me-3 mb-3 " style="width: 45%;">
-          <div class="card-body">
-            <h4 class="mb-3 card-header">{{ item.item }}</h4>
-            {% if loggedIn %}
-              Quantity: {{ item.quantity }}
-              <br>
-              Date Added: {{ item.dateAdded | date: "%A, %B %e, %Y" }}
-              <br>
-              Expiration Date: {{ item.expiration | date: "%A, %B %e, %Y" }}
-            {% else %}
-              You ran out of {{ item.item }}
-            {% endif %}
+      <div class="g-col-4 card me-3 mb-3 " style="width: 45%;">
+        <div class="card-body">
+          <h4 class="mb-3 card-header">{{ fridge.item }}</h4>
+          {% if loggedIn %}
+            Quantity: {{ fridge.quantity }}
             <br>
-            <a href="/fridge/{{item._id}}/edit" class="btn btn-info">
-              Edit
-            </a>
-            <form action="/fridge/{{item.id}}?_method=DELETE" method="POST">
-              <input
-                type="submit"
-                class="btn btn-danger"
-                value="Delete">
-            </form>
-          </div>
+            Date Added: {{ fridge.dateAdded | date: "%A, %B %e, %Y" }}
+            <br>
+            Expiration Date: {{ fridge.expiration | date: "%A, %B %e, %Y" }}
+          {% else %}
+            You ran out of {{ fridge.item }}
+          {% endif %}
+          <br>
+          <a href="/fridge/{{fridge._id}}/edit" class="btn btn-info">
+            Edit
+          </a>
+          <form action="/fridge/{{fridge.id}}?_method=DELETE" method="POST">
+            <input
+              type="submit"
+              class="btn btn-danger"
+              value="Delete">
+          </form>
         </div>
-      {% endfor %}
+      </div>
     </div>
   {% endif %}
 
@@ -40,7 +38,7 @@
     <hr>
     {% if loggedIn %}
       <div class="col-md-6">
-        <form action="/comments/{{ fridge.id }}" method="POST">
+        <form action="/fridge/{{ fridge.id }}/" method="POST">
           <fieldset>
             <legend>Add a Note</legend>
             <label class="form-label">Input Text Below:
@@ -64,9 +62,7 @@
     <hr>
     {% if fridge.comments.length > 0 %}
       <div class="container-sm justify-content-center">
-        {% for comm in fridge.comments %}
-          {% render '../comment.liquid', comm: comm, userId: userId, fridge: fridge %}
-        {% endfor %}
+        {% render '../comment.liquid', comm: comm, userId: userId, fridge: fridge %}
       </div>
     {% else %}
       <small>No notes yet...</small>

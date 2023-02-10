@@ -7,7 +7,7 @@ const Fridge = require('./models/fridge')
 const middleware = require('./utils/middleware')
 const FridgeRouter = require('./controllers/fridge')
 const UserRouter = require('./controllers/user')
-// const NoteRouter = require('./controllers/note.js')
+const CommentRouter = require('./controllers/comment')
 const User = require("./models/user")
 // SEE MORE DEPENDENCIES IN ./utils/middleware.js
 // user and resource routes linked in ./utils/middleware.js
@@ -25,7 +25,7 @@ middleware(app)
 
 app.use('/auth', UserRouter)
 app.use('/fridge', FridgeRouter)
-// app.use('/note', NoteRouter)
+app.use('/comment', CommentRouter)
 
 //HOME//
 app.get('/', (req, res) => {
