@@ -17,11 +17,9 @@ const fridgeSchema = new Schema(
 			type: Number,
 			required: true },
 		dateAdded: { 
-			type: Date,
-			required: true },
+			type: Date },
 		expiration: { 
-			type: Date,
-			required: true },
+			type: Date },
 		owner: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
